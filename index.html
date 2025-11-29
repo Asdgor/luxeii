@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Manrope:wght@400;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Manrope:wght@400;700;800&display=swap" rel="stylesheet">
 
     <script>
         tailwind.config = {
@@ -20,13 +20,14 @@
                     },
                     colors: {
                         dark: '#050505',
-                        card: '#0f0f0f',
-                        accent: '#ffffff',
-                        subtle: '#888888'
+                        card: '#0A0A0A', // Чуть темнее для контраста
+                        subtle: '#9ca3af'
                     },
                     animation: {
-                        'blob': 'blob 7s infinite',
-                        'fade-in': 'fadeIn 1s ease-out forwards',
+                        'blob': 'blob 10s infinite',
+                        'fade-in-up': 'fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'shimmer': 'shimmer 5s linear infinite',
+                        'float': 'float 6s ease-in-out infinite',
                     },
                     keyframes: {
                         blob: {
@@ -35,9 +36,17 @@
                             '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
                             '100%': { transform: 'translate(0px, 0px) scale(1)' },
                         },
-                        fadeIn: {
+                        fadeInUp: {
                             '0%': { opacity: '0', transform: 'translateY(20px)' },
                             '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        shimmer: {
+                            '0%': { backgroundPosition: '200% 0' },
+                            '100%': { backgroundPosition: '-200% 0' }
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
                         }
                     }
                 }
@@ -52,7 +61,7 @@
             overflow-x: hidden;
         }
 
-        /* Эффект шума (Noise) для текстуры */
+        /* Noise Texture */
         .noise-overlay {
             position: fixed;
             top: 0;
@@ -60,41 +69,80 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: 50;
-            opacity: 0.05;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            z-index: 40;
+            opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
         }
 
-        /* Кастомный скроллбар */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #050505;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #333;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #555;
-        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
 
-        /* Bento Grid Hover Effects */
-        .bento-card {
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        .bento-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 20px 40px -10px rgba(255, 255, 255, 0.05);
-        }
-
-        .text-gradient {
-            background: linear-gradient(to right, #fff, #888);
+        /* Text Shimmer Effect */
+        .animate-text-shimmer {
+            background: linear-gradient(
+                to right,
+                #6b7280 20%,
+                #ffffff 40%,
+                #ffffff 60%,
+                #6b7280 80%
+            );
+            background-size: 200% auto;
+            background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            animation: shimmer 5s linear infinite;
+        }
+
+        /* Spotlight Glow Logic */
+        .spotlight-card:hover::before {
+            opacity: 1;
+        }
+        .spotlight-card::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 1.5rem;
+            padding: 1px; /* border width */
+            background: radial-gradient(
+                800px circle at var(--mouse-x) var(--mouse-y),
+                rgba(255, 255, 255, 0.4),
+                transparent 40%
+            );
+            -webkit-mask: 
+                linear-gradient(#fff 0 0) content-box, 
+                linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+            z-index: 20;
+        }
+        
+        /* Inner subtle glow following mouse */
+        .spotlight-bg {
+            background: radial-gradient(
+                600px circle at var(--mouse-x) var(--mouse-y),
+                rgba(255, 255, 255, 0.06),
+                transparent 40%
+            );
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        .spotlight-card:hover .spotlight-bg {
+            opacity: 1;
+        }
+
+        /* Particles */
+        .particle {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 10s infinite ease-in-out;
         }
     </style>
 </head>
@@ -103,117 +151,159 @@
     <div class="noise-overlay"></div>
 
     <div class="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-        <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-purple-900 rounded-full mix-blend-screen filter blur-[128px] opacity-20 animate-blob"></div>
-        <div class="absolute top-[20%] right-[-10%] w-96 h-96 bg-blue-900 rounded-full mix-blend-screen filter blur-[128px] opacity-20 animate-blob animation-delay-2000"></div>
-        <div class="absolute bottom-[-10%] left-[20%] w-96 h-96 bg-white rounded-full mix-blend-screen filter blur-[150px] opacity-10 animate-blob animation-delay-4000"></div>
+        <div class="absolute top-[-10%] left-[20%] w-[500px] h-[500px] bg-purple-900/30 rounded-full blur-[120px] animate-blob mix-blend-screen"></div>
+        <div class="absolute bottom-[-10%] right-[10%] w-[600px] h-[600px] bg-blue-900/20 rounded-full blur-[130px] animate-blob animation-delay-2000 mix-blend-screen"></div>
+        
+        <div class="particle w-1 h-1 top-[20%] left-[10%]" style="animation-delay: 0s;"></div>
+        <div class="particle w-1.5 h-1.5 top-[60%] left-[80%]" style="animation-delay: 2s; opacity: 0.1;"></div>
+        <div class="particle w-1 h-1 top-[40%] right-[20%]" style="animation-delay: 4s;"></div>
+        <div class="particle w-0.5 h-0.5 top-[80%] left-[30%]" style="animation-delay: 1s;"></div>
     </div>
 
-    <main class="relative z-10 max-w-5xl mx-auto px-6 py-12 md:py-20 flex flex-col min-h-screen justify-between">
+    <main class="relative z-10 max-w-5xl mx-auto px-6 py-12 md:py-24 flex flex-col min-h-screen justify-between" id="cards-container">
         
-        <header class="flex justify-between items-center mb-16 animate-fade-in" style="animation-delay: 0.1s;">
-            <div class="text-2xl font-display font-bold tracking-tighter">LUXEII</div>
-            <a href="https://t.me/sy1ku" class="text-sm text-subtle hover:text-white transition-colors">Связаться</a>
+        <header class="flex justify-between items-center mb-20 animate-fade-in-up" style="animation-delay: 0.1s;">
+            <div class="text-2xl font-display font-bold tracking-tighter flex items-center gap-2">
+                <div class="w-2 h-2 bg-white rounded-full animate-pulse shadow-[0_0_10px_rgba(255,255,255,0.8)]"></div>
+                LUXEII
+            </div>
+            <a href="https://t.me/sy1ka" class="group flex items-center gap-2 text-sm text-subtle hover:text-white transition-colors border border-white/10 px-4 py-2 rounded-full hover:bg-white/5">
+                <span>Contact Me</span>
+                <i class="fa-solid fa-arrow-right -rotate-45 group-hover:rotate-0 transition-transform duration-300"></i>
+            </a>
         </header>
 
-        <section class="mb-20">
-            <h1 class="text-5xl md:text-8xl font-display font-bold leading-tight mb-6 tracking-tight animate-fade-in" style="animation-delay: 0.2s;">
-                DESIGN.<br>
-                <span class="text-subtle">CODE.</span><br>
-                <span class="text-gradient">MOTIVATION.</span>
+        <section class="mb-24">
+            <h1 class="text-6xl md:text-8xl font-display font-bold leading-[0.9] mb-8 tracking-tight animate-fade-in-up" style="animation-delay: 0.2s;">
+                CREATE.<br>
+                INSPIRE.<br>
+                <span class="animate-text-shimmer">ELEVATE.</span>
             </h1>
-            <p class="text-lg md:text-xl text-subtle max-w-xl leading-relaxed animate-fade-in" style="animation-delay: 0.3s;">
-                Создаю цифровой стиль и контент, который меняет мышление. 
-                YouTube креатор, дизайнер и разработчик. Добро пожаловать в мой мир.
-            </p>
+            <div class="flex flex-col md:flex-row gap-6 items-start animate-fade-in-up" style="animation-delay: 0.3s;">
+                <p class="text-lg text-subtle max-w-lg leading-relaxed">
+                    Дизайн, который цепляет. Код, который работает. Мысли, которые меняют.
+                    <span class="text-white font-medium">LUXEII</span> — это про качество и глубину.
+                </p>
+                <div class="flex gap-3">
+                    <a href="#portfolio" class="px-6 py-3 bg-white text-black font-bold rounded-full hover:scale-105 transition-transform duration-300 shadow-[0_0_20px_rgba(255,255,255,0.2)]">Портфолио</a>
+                </div>
+            </div>
         </section>
 
-        <section class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-20 animate-fade-in" style="animation-delay: 0.4s;">
+        <section id="portfolio" class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-24 animate-fade-in-up" style="animation-delay: 0.4s;">
             
-            <a href="https://t.me/cwexto" target="_blank" class="bento-card col-span-1 md:col-span-2 bg-card p-8 rounded-3xl flex flex-col justify-between h-64 md:h-80 group relative overflow-hidden">
-                <div class="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div class="relative z-10">
-                    <div class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-4 text-xl">
-                        <i class="fa-solid fa-briefcase"></i>
+            <a href="https://t.me/cwexto" target="_blank" class="spotlight-card group relative col-span-1 md:col-span-2 bg-card rounded-3xl p-1 overflow-hidden transition-all hover:scale-[1.01]">
+                <div class="spotlight-bg absolute inset-0 rounded-3xl pointer-events-none"></div>
+                
+                <div class="relative h-full bg-[#0d0d0d] rounded-[22px] p-8 flex flex-col justify-between z-10 border border-white/5">
+                    <div class="absolute top-0 right-0 p-8 opacity-20 group-hover:opacity-40 transition-opacity duration-500 transform group-hover:rotate-12">
+                        <i class="fa-solid fa-layer-group text-8xl text-white"></i>
                     </div>
-                    <h3 class="text-2xl font-bold mb-2">Портфолио</h3>
-                    <p class="text-subtle">Посмотри мои лучшие работы в дизайне и кодинге.</p>
-                </div>
-                <div class="relative z-10 self-end">
-                    <span class="inline-flex items-center gap-2 text-sm font-semibold group-hover:gap-3 transition-all">
-                        Открыть @cwexto <i class="fa-solid fa-arrow-right"></i>
-                    </span>
+                    
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-6 text-xl text-white shadow-[0_0_15px_rgba(255,255,255,0.05)] group-hover:shadow-[0_0_20px_rgba(255,255,255,0.1)] transition-all">
+                            <i class="fa-solid fa-code"></i>
+                        </div>
+                        <h3 class="text-3xl font-bold mb-2 text-white">Портфолио</h3>
+                        <p class="text-subtle group-hover:text-gray-300 transition-colors">Веб-дизайн и разработка. Мои лучшие кейсы.</p>
+                    </div>
+                    
+                    <div class="mt-8 flex items-center gap-3 text-sm font-semibold text-white">
+                        <span class="border-b border-transparent group-hover:border-white transition-all">Смотреть работы</span>
+                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                    </div>
                 </div>
             </a>
 
-            <a href="https://t.me/sy1ku" target="_blank" class="bento-card col-span-1 bg-card p-8 rounded-3xl flex flex-col justify-between h-64 md:h-80 group relative overflow-hidden">
-                <div class="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div class="relative z-10">
-                    <div class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-4 text-xl">
-                        <i class="fa-brands fa-telegram"></i>
+            <a href="https://t.me/sy1ku" target="_blank" class="spotlight-card group relative col-span-1 bg-card rounded-3xl p-1 overflow-hidden transition-all hover:scale-[1.01]">
+                <div class="spotlight-bg absolute inset-0 rounded-3xl pointer-events-none"></div>
+                
+                <div class="relative h-full bg-[#0d0d0d] rounded-[22px] p-8 flex flex-col justify-between z-10 border border-white/5">
+                    <div class="absolute inset-0 bg-gradient-to-t from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-6 text-xl shadow-[0_0_15px_rgba(59,130,246,0.1)]">
+                            <i class="fa-brands fa-telegram"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2">Мой Блог</h3>
+                        <p class="text-subtle text-sm">Лайфстайл, мысли, бекстейдж.</p>
                     </div>
-                    <h3 class="text-2xl font-bold mb-2">Мой Блог</h3>
-                    <p class="text-subtle text-sm">Мысли, лайфстайл и инсайты.</p>
-                </div>
-                <div class="relative z-10 mt-auto">
-                    <div class="w-full h-1 bg-white/10 rounded-full overflow-hidden mt-4">
-                        <div class="h-full bg-white w-2/3"></div>
+
+                    <div class="mt-auto pt-8">
+                        <div class="flex items-end gap-2 mb-2">
+                            <span class="text-4xl font-display font-bold text-white">446</span>
+                            <span class="text-sm text-subtle mb-1.5">подписчиков</span>
+                        </div>
+                        <div class="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+                            <div class="h-full bg-white w-[40%] shadow-[0_0_10px_rgba(255,255,255,0.5)]"></div>
+                        </div>
                     </div>
-                    <p class="text-xs text-subtle mt-2">1.2k+ подписчиков</p>
                 </div>
             </a>
 
-            <a href="#" class="bento-card col-span-1 bg-white text-black p-8 rounded-3xl flex flex-col justify-between h-64 group relative overflow-hidden">
-                <div class="relative z-10">
-                    <div class="w-12 h-12 rounded-full bg-black/10 flex items-center justify-center mb-4 text-xl">
-                        <i class="fa-brands fa-youtube"></i>
+            <a href="#" class="spotlight-card group relative col-span-1 bg-card rounded-3xl p-1 overflow-hidden transition-all hover:scale-[1.01]">
+                <div class="spotlight-bg absolute inset-0 rounded-3xl pointer-events-none"></div>
+                
+                <div class="relative h-full bg-white text-black rounded-[22px] p-8 flex flex-col justify-between z-10 overflow-hidden">
+                    <div class="absolute -right-4 -bottom-4 w-32 h-32 bg-red-500 rounded-full blur-[60px] opacity-20 group-hover:opacity-40 transition-all duration-500"></div>
+                    
+                    <div class="relative z-10">
+                        <div class="w-12 h-12 rounded-2xl bg-black/5 flex items-center justify-center mb-6 text-xl">
+                            <i class="fa-brands fa-youtube"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold">YouTube</h3>
+                        <p class="font-medium mt-1 opacity-70">Мотивация</p>
                     </div>
-                    <h3 class="text-2xl font-bold">YouTube</h3>
-                </div>
-                <div class="relative z-10">
-                     <p class="font-medium">Саморазвитие & <br>Мотивация</p>
-                </div>
-                <div class="absolute right-[-20px] bottom-[-20px] text-9xl opacity-10 group-hover:scale-110 transition-transform duration-500">
-                    <i class="fa-solid fa-play"></i>
+                    
+                    <div class="relative z-10 self-end transform group-hover:scale-110 transition-transform duration-300">
+                        <i class="fa-solid fa-circle-play text-5xl shadow-xl rounded-full"></i>
+                    </div>
                 </div>
             </a>
 
-            <a href="https://t.me/sy1ku" target="_blank" class="bento-card col-span-1 md:col-span-2 bg-card p-8 rounded-3xl flex items-center justify-between group relative overflow-hidden h-64">
-                <div class="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div class="relative z-10 max-w-xs">
-                    <h3 class="text-3xl font-bold mb-2">Сотрудничество</h3>
-                    <p class="text-subtle">Нужен сайт или дизайн? Напиши мне в личку.</p>
-                </div>
-                <div class="relative z-10 w-16 h-16 rounded-full bg-white text-black flex items-center justify-center text-2xl group-hover:rotate-45 transition-transform duration-300">
-                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            <a href="https://t.me/sy1ka" target="_blank" class="spotlight-card group relative col-span-1 md:col-span-2 bg-card rounded-3xl p-1 overflow-hidden transition-all hover:scale-[1.01]">
+                <div class="spotlight-bg absolute inset-0 rounded-3xl pointer-events-none"></div>
+                
+                <div class="relative h-full bg-[#0d0d0d] rounded-[22px] p-8 flex items-center justify-between z-10 border border-white/5">
+                    <div class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
+                    
+                    <div class="relative z-10">
+                        <h3 class="text-2xl font-bold mb-2 text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-gray-400 transition-all">
+                            Написать мне
+                        </h3>
+                        <p class="text-subtle">Обсудить проект или идею</p>
+                    </div>
+                    
+                    <div class="relative z-10 w-14 h-14 rounded-full border border-white/20 flex items-center justify-center text-xl group-hover:bg-white group-hover:text-black group-hover:border-transparent transition-all duration-300 shadow-[0_0_15px_rgba(255,255,255,0.05)]">
+                        <i class="fa-regular fa-paper-plane"></i>
+                    </div>
                 </div>
             </a>
 
         </section>
 
-        <footer class="text-center text-subtle text-sm py-8 border-t border-white/5 animate-fade-in" style="animation-delay: 0.6s;">
-            <p>&copy; 2025 LUXEII. All Rights Reserved.</p>
-            <p class="mt-2 opacity-50">Designed & Coded by LUXEII</p>
+        <footer class="text-center text-subtle text-xs py-8 animate-fade-in-up opacity-50" style="animation-delay: 0.6s;">
+            <p>2025 © LUXEII. Crafted with passion.</p>
         </footer>
 
     </main>
 
     <script>
-        // Небольшой скрипт для плавного появления элементов при скролле (если контента станет больше)
+        // Скрипт для эффекта Spotlight (Слежение за мышкой)
         document.addEventListener('DOMContentLoaded', () => {
-            const observerOptions = {
-                threshold: 0.1
-            };
+            const cards = document.querySelectorAll('.spotlight-card');
+            const container = document.getElementById('cards-container');
 
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('opacity-100', 'translate-y-0');
-                        entry.target.classList.remove('opacity-0', 'translate-y-10');
-                    }
-                });
-            }, observerOptions);
+            container.onmousemove = e => {
+                for(const card of cards) {
+                    const rect = card.getBoundingClientRect(),
+                          x = e.clientX - rect.left,
+                          y = e.clientY - rect.top;
 
-            // Можно добавить класс .reveal элементам в будущем
+                    card.style.setProperty("--mouse-x", `${x}px`);
+                    card.style.setProperty("--mouse-y", `${y}px`);
+                };
+            }
         });
     </script>
 </body>
