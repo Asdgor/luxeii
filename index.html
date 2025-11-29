@@ -7,12 +7,12 @@
     
     <style>
         body {
-            /* Убрали opacity: 0 и transition. Теперь Body виден мгновенно */
             background-color: #01040D;
             color: white;
             font-family: 'Montserrat', sans-serif;
             overflow-x: hidden;
             line-height: 1.6;
+            /* Убрали лишние стили, оставили только базу */
         }
     </style>
     
@@ -31,7 +31,7 @@
                         'neon-purple': '#BB00FF', 
                         'gray-soft': '#1A1D27',
                         'red-prod': '#E53E3E',
-                        'accent-yellow': '#FACC15', /* Взяли с референса */
+                        'accent-yellow': '#FACC15', 
                     },
                     fontFamily: {
                         sans: ['Montserrat', 'sans-serif'],
@@ -57,7 +57,7 @@
     </script>
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Montserrat:wght@400;700;900&family=Syncopate:wght@700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Montserrat:wght@400;700;900&family=Syncopate:wght=700&display=swap');
 
         h1, h2, h3 {
             font-family: 'Syncopate', sans-serif;
@@ -90,6 +90,7 @@
             overflow: hidden;
         }
         
+        /* ГЛАВНЫЙ ФОН СЕТКА */
         .hero-grid-bg {
             position: absolute;
             top: 0;
@@ -109,17 +110,45 @@
             box-shadow: 0 0 40px rgba(229, 62, 62, 0.3);
         }
         
-        /* Стили для Hero, чтобы соответствовать референсу ELYAPROBRAND */
         .hero-banner-bg {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 60%;
-            background: linear-gradient(to top, rgba(250, 204, 21, 0.3) 0%, transparent 100%); /* Желтый градиент снизу */
-            pointer-events: none;
-            opacity: 0.7;
+             /* Убрал этот градиент, он мешал на первом экране */
+             display: none;
         }
+
+        /* ================================================
+        НОВЫЕ СТИЛИ ДЛЯ ПРИВЕТСТВЕННОГО ЭКРАНА
+        ================================================
+        */
+        #welcome-screen {
+            height: 100vh; /* Занимаем весь экран */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+        }
+        
+        .glitch-text {
+            /* Стили для имитации глитча/неонового сдвига */
+            text-shadow: 
+                0 0 10px rgba(0, 240, 255, 0.7), 
+                0 0 20px rgba(0, 240, 255, 0.5), 
+                2px 2px 0px #BB00FF; /* Фиолетовый сдвиг */
+            transition: all 0.2s ease;
+        }
+        
+        .glitch-text:hover {
+             text-shadow: 
+                0 0 15px rgba(0, 240, 255, 0.9), 
+                0 0 30px rgba(0, 240, 255, 0.7), 
+                -2px -2px 0px #FACC15; /* Желтый сдвиг при наведении */
+        }
+        
+        .hero-cta-btn {
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.6);
+            transition: all 0.4s ease;
+        }
+
     </style>
 </head>
 <body>
@@ -127,7 +156,7 @@
 
     <header id="header" class="fixed top-0 w-full z-50 p-4 md:p-6 glass-ui border-b border-white/5">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <a href="#hero" class="text-3xl font-display font-bold tracking-widest text-white">
+            <a href="#welcome-screen" class="text-3xl font-display font-bold tracking-widest text-white">
                 <span class="text-neon-blue">LUXEII</span>
             </a>
             <nav class="hidden md:flex space-x-8 text-sm font-medium tracking-wider">
@@ -144,20 +173,38 @@
     </header>
 
     <main>
-        <section id="hero" class="relative min-h-screen flex items-center justify-center text-center pt-24 px-4 overflow-hidden">
-            
+        
+        <section id="welcome-screen" class="relative">
             <div class="hero-grid-bg"></div>
-            <div class="hero-banner-bg"></div> 
             
-            <div class="relative z-10 max-w-5xl mx-auto">
+            <div class="relative z-10 max-w-5xl mx-auto px-4">
                 
-                <div class="relative mb-8 flex justify-center items-end h-[40vh] md:h-[60vh] overflow-visible">
+                <h1 id="hero-title" class="text-6xl md:text-9xl font-black mb-4 tracking-widest text-neon-blue glitch-text opacity-0" style="font-family: 'Syncopate', sans-serif;">
+                    LUXEII
+                </h1>
+                
+                <p id="hero-subtitle" class="text-2xl md:text-4xl font-light text-white mb-10 opacity-0">
+                    ТВОЙ <span class="text-accent-yellow">DIGITAL</span> АПГРЕЙД. <span class="text-neon-purple">СИСТЕМА</span>.
+                </p>
+                
+                <button id="scroll-to-content" class="hero-cta-btn bg-neon-blue text-bg-dark font-bold py-4 px-10 text-lg rounded-full uppercase tracking-widest hover:shadow-neon-blue transition-all duration-300 inline-block opacity-0">
+                    НАЧАТЬ ПУТЕШЕСТВИЕ
+                </button>
+                
+            </div>
+        </section>
+        
+        <section id="genesis" class="relative min-h-screen flex items-start justify-center text-center pt-24 px-4 overflow-hidden bg-bg-dark">
+            
+            <div class="relative z-10 max-w-5xl mx-auto pt-16">
+                
+                <div class="relative mb-8 flex justify-center items-end h-auto md:h-[40vh] overflow-visible">
                     
-                    <img src="https://via.placeholder.com/150x150.png?text=GENESIS" alt="Genesis Logo" class="w-24 h-24 md:w-32 md:h-32 absolute top-0 mx-auto object-cover rounded-full shadow-lg shadow-neon-purple/20">
+                    <img src="https://via.placeholder.com/150x150.png?text=GENESIS" alt="Genesis Logo" class="w-24 h-24 md:w-32 md:h-32 mx-auto object-cover rounded-full shadow-lg shadow-neon-purple/20 mb-6">
 
-                    <div class="absolute bottom-[-10%] md:bottom-[-20%]">
+                    <div class="absolute bottom-0">
                         <h2 class="text-4xl md:text-6xl lg:text-7xl font-black leading-tight text-white mb-6">
-                            ТВОЙ <span class="text-accent-yellow">DIGITAL</span> АПГРЕЙД
+                            ВРЕМЯ ПЕРЕЗАГРУЗКИ. <br>ПРОЧИТАЙ МАНУАЛ.
                         </h2>
                         
                         <a href="https://t.me/sy1ku" target="_blank" class="bg-accent-yellow text-bg-dark font-bold py-4 px-10 text-lg rounded-full uppercase tracking-widest shadow-xl shadow-accent-yellow/40 hover:shadow-accent-yellow transition-all duration-300 inline-block">
@@ -165,10 +212,6 @@
                         </a>
                     </div>
                 </div>
-
-                <h1 class="text-4xl md:text-7xl font-black leading-tight text-white/5 mb-6 opacity-0 absolute top-1/2 left-0 right-0 -translate-y-1/2 -z-10 tracking-[0.5em] hidden md:block" style="font-family: 'Syncopate', sans-serif;">
-                    LUXEII
-                </h1>
                 
                 <p class="text-xl md:text-3xl text-gray-300 pt-[10vh] font-light max-w-3xl mx-auto">
                     Я не даю мотивацию, я даю **Алгоритм**. <br>Перестань быть зрителем.
@@ -434,17 +477,30 @@
         lucide.createIcons();
         gsap.registerPlugin(ScrollTrigger);
 
-        // 1. ГЛАВНАЯ ФУНКЦИЯ ЗАГРУЗКИ: Убираем любую задержку
+        // Функция анимации для первого экрана
+        function animateHeroText() {
+            gsap.timeline()
+                .fromTo("#hero-title", 
+                    { opacity: 0, y: 50, scale: 0.8 }, 
+                    { opacity: 1, y: 0, scale: 1, duration: 1.2, ease: "power3.out" })
+                .fromTo("#hero-subtitle", 
+                    { opacity: 0, y: 30 }, 
+                    { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, "-=0.5")
+                .fromTo("#scroll-to-content", 
+                    { opacity: 0, scale: 0.5 }, 
+                    { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.7)" }, "-=0.4");
+        }
+
+        // 1. ГЛАВНАЯ ФУНКЦИЯ ЗАГРУЗКИ
         window.addEventListener('load', () => {
-            // Здесь можно было бы поставить body.style.opacity = 1, но мы его убрали из CSS,
-            // чтобы контент был виден сразу.
             
+            animateHeroText(); // Запускаем анимацию текста
             ScrollTrigger.refresh();
             
-            // Parallax для фона Hero (единственная анимация)
+            // Parallax для фона Hero
             gsap.to(".hero-grid-bg", {
                 scrollTrigger: {
-                    trigger: "#hero",
+                    trigger: "#welcome-screen",
                     start: "top top",
                     end: "bottom top",
                     scrub: true,
@@ -453,7 +509,6 @@
                 ease: "none"
             });
         });
-
 
         // 2. ОБРАБОТКА ФОРМЫ (ИМИТАЦИЯ)
         function handleFinalForm(e) {
@@ -481,12 +536,20 @@
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                const targetId = this.getAttribute('href');
+                document.querySelector(targetId).scrollIntoView({
                     behavior: 'smooth'
                 });
+            });
+        });
+        
+        // НОВЫЙ СКРОЛЛ ДЛЯ КНОПКИ ВСТУПИТЕЛЬНОГО ЭКРАНА
+        document.getElementById('scroll-to-content').addEventListener('click', function() {
+            // Скроллим к началу секции, где уже есть контент (секция #genesis - это твой старый hero)
+            document.querySelector('#genesis').scrollIntoView({
+                behavior: 'smooth'
             });
         });
     </script>
 </body>
 </html>
-
