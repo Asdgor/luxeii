@@ -1,73 +1,44 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LUXEII | СИСТЕМНАЯ АРХИТЕКТУРА V3.0</title>
-    
-    <style>
-        /* ==============================================
-           CORE STYLES
-           ============================================== */
-        body {
-            background-color: #0A0A0A; 
-            color: white;
-            font-family: 'Montserrat', sans-serif;
-            overflow-x: hidden;
-            line-height: 1.6;
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-        }
-        
-        /* Импорт шрифтов */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Montserrat:wght@400;700;900&family=Syncopate:wght=700&display=swap');
-
-        h1, h2, h3, .font-display {
-            font-family: 'Syncopate', sans-serif;
-            text-transform: uppercase;
-        }
-
-        /* ==============================================
-           TAILWIND CONFIG (Повтор для чистоты)
-           ============================================== */
-        /* Tailwind Config block here for completeness */
-    </style>
-    
+    <title>LUXEII | Motivation & Design</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Manrope:wght@400;700;800&display=swap" rel="stylesheet">
 
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    colors: {
-                        'bg-dark': '#0A0A0A',
-                        'accent-metal': '#00C4CC', 
-                        'accent-shadow': '#01191A', 
-                        'gray-soft': '#181818', 
-                        'text-faded': '#AAAAAA', 
-                        'border-heavy': '#333333',
-                    },
                     fontFamily: {
-                        sans: ['Montserrat', 'sans-serif'],
-                        display: ['Syncopate', 'sans-serif'],
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Manrope', 'sans-serif'],
                     },
-                    keyframes: {
-                        pulseMetal: {
-                            '0%, 100%': { 'box-shadow': '0 0 10px rgba(0, 196, 204, 0.4)' },
-                            '50%': { 'box-shadow': '0 0 5px rgba(0, 196, 204, 0.2)' },
-                        },
-                        gridMove: {
-                            '0%': { backgroundPosition: '0 0' },
-                            '100%': { backgroundPosition: '400px 400px' },
-                        }
+                    colors: {
+                        dark: '#050505',
+                        card: '#0f0f0f',
+                        accent: '#ffffff',
+                        subtle: '#888888'
                     },
                     animation: {
-                        pulseMetal: 'pulseMetal 3s infinite',
-                        gridMove: 'gridMove 60s linear infinite',
+                        'blob': 'blob 7s infinite',
+                        'fade-in': 'fadeIn 1s ease-out forwards',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
                     }
                 }
             }
@@ -75,10 +46,13 @@
     </script>
 
     <style>
-        /* ==============================================
-           UTILITIES & COMPONENT STYLES (Детализация)
-           ============================================== */
-        
+        body {
+            background-color: #050505;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Эффект шума (Noise) для текстуры */
         .noise-overlay {
             position: fixed;
             top: 0;
@@ -87,493 +61,159 @@
             height: 100%;
             pointer-events: none;
             z-index: 50;
-            opacity: 0.02;
-            background: url('https://grainy-gradients.vercel.app/noise.svg');
+            opacity: 0.05;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
         }
 
-        /* Более глубокий и структурированный фон для карточек */
-        .ui-card {
-            background-color: #121212;
-            border: 1px solid rgba(0, 196, 204, 0.1);
-            box-shadow: 
-                0 4px 15px rgba(0, 0, 0, 0.4), /* Основная тень */
-                inset 0 0 5px rgba(255, 255, 255, 0.05); /* Внутренняя тень для глубины */
-            transition: all 0.3s ease;
+        /* Кастомный скроллбар */
+        ::-webkit-scrollbar {
+            width: 8px;
         }
-        
-        .metal-btn {
-            background-color: #00C4CC;
-            color: #0A0A0A;
-            box-shadow: 0 0 15px rgba(0, 196, 204, 0.4);
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
-            font-weight: 700;
+        ::-webkit-scrollbar-track {
+            background: #050505;
         }
-        
-        .hero-grid-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                linear-gradient(to right, #181818 1px, transparent 1px),
-                linear-gradient(to bottom, #181818 1px, transparent 1px);
-            background-size: 40px 40px;
-            opacity: 0.2;
-            animation: gridMove 60s linear infinite;
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
         }
-        
-        /* Стили для Welcome Screen */
-        #welcome-screen {
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            overflow: hidden;
-        }
-        
-        .glitch-text {
-            text-shadow: 
-                0 0 15px rgba(0, 196, 204, 0.8), 
-                -1px 1px 0px #FFFFFF; 
-            transition: all 0.2s ease;
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
         }
 
-        .glitch-text:hover {
-            text-shadow: 
-                0 0 25px rgba(0, 196, 204, 1), 
-                -3px -3px 0px #333333; 
+        /* Bento Grid Hover Effects */
+        .bento-card {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .bento-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px -10px rgba(255, 255, 255, 0.05);
         }
 
-        /* Декоративные классы для "раздутия" кода */
-        .deco-line {
-            width: 100%;
-            height: 1px;
-            background-color: #333333;
-            opacity: 0.5;
-            margin: 2rem 0;
+        .text-gradient {
+            background: linear-gradient(to right, #fff, #888);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        
-        .data-label {
-            font-family: 'Inter', monospace;
-            font-size: 0.8rem;
-            color: #00C4CC;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            padding: 0.5rem 0;
-            border-bottom: 1px solid #181818;
-            margin-bottom: 1rem;
-        }
-        
-        .stat-box {
-            background-color: #121212;
-            padding: 1rem;
-            border-left: 3px solid #00C4CC;
-        }
-
-        /* ==============================================
-           ДОПОЛНИТЕЛЬНЫЕ ДЕКОРАТИВНЫЕ КЛАССЫ (для объема)
-           ============================================== */
-
-        .section-separator {
-            width: 80%;
-            height: 2px;
-            margin: 80px auto;
-            background: linear-gradient(to right, transparent, #00C4CC, transparent);
-            opacity: 0.3;
-        }
-
-        .shadow-metal {
-             box-shadow: 0 0 40px rgba(0, 196, 204, 0.1);
-        }
-        
-        /* 500+ строк дополнительных CSS (заполнитель) */
-        
-        .padding-large { padding: 4rem; }
-        .margin-top-huge { margin-top: 10rem; }
-        .text-size-xl-alt { font-size: 1.5rem; }
-        .border-thin-grey { border: 1px solid #181818; }
-        .bg-pattern-dark { background-color: #111111; background-image: radial-gradient(#181818 1px, transparent 1px); background-size: 20px 20px; }
-        .hover-lift:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6); }
-        .code-block { font-family: 'Inter', monospace; background-color: #0A0A0A; border: 1px solid #181818; padding: 1rem; color: #00C4CC; }
-        .subtle-gradient { background: linear-gradient(to top, rgba(0, 0, 0, 0.5), transparent); }
-        .full-width-line { height: 1px; background-color: #222; margin: 20px 0; }
-        .grid-layout-12 { display: grid; grid-template-columns: repeat(12, 1fr); gap: 1rem; }
-        .col-span-8 { grid-column: span 8 / span 8; }
-        .col-span-4 { grid-column: span 4 / span 4; }
-        /* и так далее, до достижения нужного объема... */
-
     </style>
 </head>
-<body>
+<body class="antialiased relative selection:bg-white selection:text-black">
+
     <div class="noise-overlay"></div>
 
-    <header id="header" class="fixed top-0 w-full z-50 p-4 md:p-6 ui-card border-b border-white/5">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <a href="#welcome-screen" class="text-3xl font-display font-bold tracking-widest text-white">
-                <span class="text-accent-metal">LUXEII</span>
-            </a>
-            <nav class="hidden md:flex space-x-8 text-sm font-medium tracking-wider">
-                <a href="#about" class="hover:text-accent-metal transition duration-300">АРХИТЕКТУРА</a>
-                <a href="#projects" class="hover:text-accent-metal transition duration-300">ПОРТФОЛИО</a>
-                <a href="#results" class="hover:text-accent-metal transition duration-300">ЛОГИ</a>
-                <a href="https://youtube.com/@mellloos?si=nvD0MbXr4OfM1Iv" target="_blank" class="hover:text-accent-metal transition duration-300">YOUTUBE</a>
-                <a href="https://t.me/sy1ku" target="_blank" class="hover:text-accent-metal transition duration-300">КОНТАКТ</a>
-            </nav>
-            <a href="https://t.me/sy1ku" target="_blank" class="md:hidden text-white menu-toggle">
-                <i data-lucide="send" class="w-7 h-7 text-accent-metal"></i>
-            </a>
-        </div>
-    </header>
+    <div class="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-purple-900 rounded-full mix-blend-screen filter blur-[128px] opacity-20 animate-blob"></div>
+        <div class="absolute top-[20%] right-[-10%] w-96 h-96 bg-blue-900 rounded-full mix-blend-screen filter blur-[128px] opacity-20 animate-blob animation-delay-2000"></div>
+        <div class="absolute bottom-[-10%] left-[20%] w-96 h-96 bg-white rounded-full mix-blend-screen filter blur-[150px] opacity-10 animate-blob animation-delay-4000"></div>
+    </div>
 
-    <main>
+    <main class="relative z-10 max-w-5xl mx-auto px-6 py-12 md:py-20 flex flex-col min-h-screen justify-between">
         
-        <section id="welcome-screen" class="relative">
-            <div class="hero-grid-bg"></div>
+        <header class="flex justify-between items-center mb-16 animate-fade-in" style="animation-delay: 0.1s;">
+            <div class="text-2xl font-display font-bold tracking-tighter">LUXEII</div>
+            <a href="https://t.me/sy1ku" class="text-sm text-subtle hover:text-white transition-colors">Связаться</a>
+        </header>
+
+        <section class="mb-20">
+            <h1 class="text-5xl md:text-8xl font-display font-bold leading-tight mb-6 tracking-tight animate-fade-in" style="animation-delay: 0.2s;">
+                DESIGN.<br>
+                <span class="text-subtle">CODE.</span><br>
+                <span class="text-gradient">MOTIVATION.</span>
+            </h1>
+            <p class="text-lg md:text-xl text-subtle max-w-xl leading-relaxed animate-fade-in" style="animation-delay: 0.3s;">
+                Создаю цифровой стиль и контент, который меняет мышление. 
+                YouTube креатор, дизайнер и разработчик. Добро пожаловать в мой мир.
+            </p>
+        </section>
+
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-20 animate-fade-in" style="animation-delay: 0.4s;">
             
-            <div class="relative z-10 max-w-5xl mx-auto px-4">
-                
-                <h1 id="hero-title" class="text-6xl md:text-9xl font-black mb-4 tracking-widest text-accent-metal glitch-text opacity-0" style="font-family: 'Syncopate', sans-serif;">
-                    LUXEII
-                </h1>
-                
-                <p id="hero-subtitle" class="text-2xl md:text-4xl font-light text-text-faded mb-10 opacity-0">
-                    ТВОЯ АРХИТЕКТУРА <span class="text-white">СИСТЕМНОГО</span> УСПЕХА.
-                </p>
-                
-                <button id="scroll-to-content" class="metal-btn text-lg rounded-lg uppercase tracking-widest py-4 px-10 font-bold opacity-0 hover:shadow-metal">
-                    СТАРТ ОПЕРАЦИИ
-                </button>
-                
-            </div>
-        </section>
-        
-        <section id="genesis" class="relative flex items-center justify-center text-center pt-32 pb-24 px-4 bg-bg-dark border-t border-border-heavy">
-            
-            <div class="relative z-10 max-w-6xl mx-auto">
-                
-                <div class="full-width-line"></div> 
-                
-                <h2 class="text-5xl md:text-7xl font-black leading-tight text-white mt-12 mb-12">
-                    ПЕРЕСТАНЬ БЫТЬ <span class="text-accent-metal">ЗРИТЕЛЕМ</span>. <br>ПРИМЕНИ АЛГОРИТМ.
-                </h2>
-                
-                <p class="text-2xl md:text-3xl text-text-faded font-light max-w-4xl mx-auto mb-10">
-                    Твоя жизнь — не мотивационный ролик, а программный код. Я даю **Алгоритм**, а не эмоции.
-                </p>
-                
-                <a href="https://t.me/sy1ku" target="_blank" class="metal-btn bg-white text-bg-dark font-bold py-4 px-10 text-lg rounded-lg uppercase tracking-widest shadow-metal inline-block hover-lift">
-                    ЗАПУСТИТЬ КОНТАКТ
-                </a>
-                
-                <div class="deco-line mt-20"></div> 
-            </div>
-        </section>
-        
-        <section id="dashboard" class="py-32 px-4 bg-gray-soft/50 border-y border-border-heavy">
-            <div class="max-w-7xl mx-auto">
-                <h2 class="section-title text-4xl md:text-6xl font-black mb-16 text-center">
-                    СИСТЕМНЫЙ <span class="text-accent-metal">МОНИТОРИНГ</span>
-                </h2>
-                
-                <div class="grid-layout-12">
-                    
-                    <div class="col-span-8 ui-card p-6 shadow-metal border-thin-grey hover-lift">
-                        <div class="data-label">ПРОГНОЗ РОСТА (EXECUTION FLOW)</div>
-                        <img src="https://via.placeholder.com/900x450.png?text=ADVANCED+VECTOR+GRAPHICS" alt="Data Chart" class="w-full filter grayscale opacity-80">
-                        <div class="code-block mt-4">
-                            &gt; status: CORE_SYSTEM_ONLINE<br>
-                            &gt; trend: UPWARD (98.7% CONFIDENCE)
-                        </div>
+            <a href="https://t.me/cwexto" target="_blank" class="bento-card col-span-1 md:col-span-2 bg-card p-8 rounded-3xl flex flex-col justify-between h-64 md:h-80 group relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div class="relative z-10">
+                    <div class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-4 text-xl">
+                        <i class="fa-solid fa-briefcase"></i>
                     </div>
-                    
-                    <div class="col-span-4 space-y-4">
-                        <div class="stat-box ui-card hover-lift">
-                            <h3 class="text-3xl font-display text-accent-metal">180%</h3>
-                            <p class="text-text-faded">KPI: ANNUAL GROWTH RATE</p>
-                            <div class="full-width-line"></div> 
-                        </div>
-                        <div class="stat-box ui-card hover-lift">
-                            <h3 class="text-3xl font-display text-white">4.8k</h3>
-                            <p class="text-text-faded">ACTIVE SYSTEM USERS</p>
-                            <div class="full-width-line"></div> 
-                        </div>
-                        <div class="stat-box ui-card hover-lift">
-                            <h3 class="text-3xl font-display text-accent-metal">ALPHA</h3>
-                            <p class="text-text-faded">CURRENT STAGE DEPLOYMENT</p>
-                            <div class="full-width-line"></div> 
-                        </div>
-                    </div>
-                    
-                    <div class="col-span-12 ui-card p-4 mt-6 hover-lift">
-                        <div class="data-label">СИСТЕМНЫЙ ЛОГ ОПЕРАЦИЙ</div>
-                        <div class="code-block overflow-x-auto text-sm" style="height: 150px;">
-                            [12:00:37] CORE_INIT: System check successful. Entering operational mode.<br>
-                            [12:00:40] DATA_FETCH: User flow optimization initiated. Target: 100%.<br>
-                            [12:00:45] UI/UX: Render complete. Parallax and GSAP active.<br>
-                            [12:00:50] USER_ACTION: Scroll detected. Transitioning to Genesis Section.<br>
-                            [12:01:05] MODULE_ABOUT: Architecture V3.0 documentation loaded.<br>
-                            [12:01:10] ... (множество строк для объема кода)
-                            [12:01:15] ...
-                            [12:01:20] ...
-                        </div>
-                    </div>
-                    
+                    <h3 class="text-2xl font-bold mb-2">Портфолио</h3>
+                    <p class="text-subtle">Посмотри мои лучшие работы в дизайне и кодинге.</p>
                 </div>
-            </div>
+                <div class="relative z-10 self-end">
+                    <span class="inline-flex items-center gap-2 text-sm font-semibold group-hover:gap-3 transition-all">
+                        Открыть @cwexto <i class="fa-solid fa-arrow-right"></i>
+                    </span>
+                </div>
+            </a>
+
+            <a href="https://t.me/sy1ku" target="_blank" class="bento-card col-span-1 bg-card p-8 rounded-3xl flex flex-col justify-between h-64 md:h-80 group relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div class="relative z-10">
+                    <div class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-4 text-xl">
+                        <i class="fa-brands fa-telegram"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-2">Мой Блог</h3>
+                    <p class="text-subtle text-sm">Мысли, лайфстайл и инсайты.</p>
+                </div>
+                <div class="relative z-10 mt-auto">
+                    <div class="w-full h-1 bg-white/10 rounded-full overflow-hidden mt-4">
+                        <div class="h-full bg-white w-2/3"></div>
+                    </div>
+                    <p class="text-xs text-subtle mt-2">1.2k+ подписчиков</p>
+                </div>
+            </a>
+
+            <a href="#" class="bento-card col-span-1 bg-white text-black p-8 rounded-3xl flex flex-col justify-between h-64 group relative overflow-hidden">
+                <div class="relative z-10">
+                    <div class="w-12 h-12 rounded-full bg-black/10 flex items-center justify-center mb-4 text-xl">
+                        <i class="fa-brands fa-youtube"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold">YouTube</h3>
+                </div>
+                <div class="relative z-10">
+                     <p class="font-medium">Саморазвитие & <br>Мотивация</p>
+                </div>
+                <div class="absolute right-[-20px] bottom-[-20px] text-9xl opacity-10 group-hover:scale-110 transition-transform duration-500">
+                    <i class="fa-solid fa-play"></i>
+                </div>
+            </a>
+
+            <a href="https://t.me/sy1ku" target="_blank" class="bento-card col-span-1 md:col-span-2 bg-card p-8 rounded-3xl flex items-center justify-between group relative overflow-hidden h-64">
+                <div class="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div class="relative z-10 max-w-xs">
+                    <h3 class="text-3xl font-bold mb-2">Сотрудничество</h3>
+                    <p class="text-subtle">Нужен сайт или дизайн? Напиши мне в личку.</p>
+                </div>
+                <div class="relative z-10 w-16 h-16 rounded-full bg-white text-black flex items-center justify-center text-2xl group-hover:rotate-45 transition-transform duration-300">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                </div>
+            </a>
+
         </section>
 
-        <section id="about" class="py-32 px-4 bg-bg-dark relative">
-            <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
-                
-                <div class="about-card p-8 ui-card rounded-3xl shadow-metal hover-lift">
-                    <img src="https://via.placeholder.com/300x300.png?text=AUTHOR_ID" alt="LUXEII Avatar" class="w-32 h-32 rounded-full border-4 border-accent-metal/70 mx-auto mb-6 object-cover filter brightness-50 hover:brightness-100 transition-all duration-500">
-                    <h3 class="text-2xl font-display text-center mb-4">LUXEII (СИМОН) | SYSTEM ARCHITECT</h3>
-                    
-                    <div class="deco-line"></div> 
-                    
-                    <p class="text-text-faded text-center italic mb-6">
-                        Я — **LUXEII**, и моя задача — предоставить тебе **рабочую систему**. Никакой воды, только высокоточный код для улучшения финансов, дисциплины и статуса.
-                    </p>
-                    
-                    <a href="https://t.me/sy1ku" target="_blank" class="w-full block text-center py-3 bg-accent-metal text-bg-dark font-bold rounded-lg mt-4 metal-btn hover-lift">
-                        СВЯЗАТЬСЯ СО МНОЙ (ИНИЦИИРОВАТЬ КОНТАКТ)
-                    </a>
-                </div>
-
-                <div class="about-content">
-                    <h2 class="text-4xl md:text-6xl font-black mb-8 leading-snug">
-                        ФИЛОСОФИЯ <span class="text-accent-metal">АРХИТЕКТУРЫ</span>:
-                        <br> КОД ДЛЯ РОСТА
-                    </h2>
-                    <p class="text-text-faded text-lg mb-6">
-                        Моя миссия — дать тебе не просто контент, а **архитектуру успеха**. Мы отключаемся от информационного шума и включаем режим **реальной, системной трансформации**.
-                    </p>
-                    
-                    <ul class="space-y-4 text-text-faded">
-                        <li class="flex items-start gap-3"><i data-lucide="check-square" class="w-5 h-5 text-accent-metal mt-1"></i> ЧИСТЫЙ АЛГОРИТМ ВМЕСТО ЭМОЦИЙ.</li>
-                        <li class="flex items-start gap-3"><i data-lucide="check-square" class="w-5 h-5 text-accent-metal mt-1"></i> МИНИМАЛИЗАЦИЯ ИНФОРМАЦИОННОГО ШУМА.</li>
-                        <li class="flex items-start gap-3"><i data-lucide="check-square" class="w-5 h-5 text-accent-metal mt-1"></i> ФОКУС НА ИНВЕСТИЦИЯХ И МАСШТАБЕ.</li>
-                    </ul>
-
-                    <div class="full-width-line mt-8"></div>
-
-                    <a href="https://youtube.com/@mellloos?si=nvD0MbXr4OfM1Iv" target="_blank" class="text-accent-metal hover:text-white transition duration-300 flex items-center gap-2 mt-4">
-                        КАНАЛ С ВИЗУАЛИЗАЦИЕЙ РЕЗУЛЬТАТОВ
-                        <i data-lucide="youtube" class="w-5 h-5"></i>
-                    </a>
-                </div>
-            </div>
-        </section>
-        
-        <div class="section-separator"></div>
-
-        <section id="projects" class="py-32 px-4 relative bg-gray-soft/50 overflow-hidden">
-            <div class="max-w-7xl mx-auto text-center">
-                <h2 class="section-title text-4xl md:text-6xl font-black mb-16">
-                    АРХИВ ПРОЕКТОВ <span class="text-accent-metal">(ПОРТФОЛИО)</span>
-                </h2>
-                
-                <div class="grid md:grid-cols-3 gap-8">
-                    <div class="project-card p-8 rounded-xl ui-card transition-all duration-500 hover-lift">
-                        <i data-lucide="monitor-play" class="w-10 h-10 text-accent-metal mb-4"></i>
-                        <h3 class="text-2xl font-display mb-3">YouTube | ВИЗУАЛ (OUTPUT)</h3>
-                        <p class="text-text-faded mb-6">
-                            Здесь ты увидишь конечный продукт — визуализацию нашего мышления и подхода к делу.
-                        </p>
-                        <a href="https://youtube.com/@mellloos?si=nvD0MbXr4OfM1Iv" target="_blank" class="text-accent-metal font-bold hover:text-white transition duration-300">ПЕРЕЙТИ В АРХИВ</a>
-                    </div>
-
-                    <div class="project-card p-8 rounded-xl ui-card transition-all duration-500 hover-lift">
-                        <i data-lucide="code" class="w-10 h-10 text-accent-metal mb-4"></i>
-                        <h3 class="text-2xl font-display mb-3">Telegram | WORKFLOW (PROCESS)</h3>
-                        <p class="text-text-faded mb-6">
-                            Кейсы, процессы, внутренняя документация — всё, что скрыто от глаз обычного пользователя.
-                        </p>
-                        <a href="https://t.me/cwexto" target="_blank" class="text-accent-metal font-bold hover:text-white transition duration-300">ПОСМОТРЕТЬ РАБОТЫ</a>
-                    </div>
-                    
-                    <div class="project-card p-8 rounded-xl ui-card transition-all duration-500 hover-lift">
-                        <i data-lucide="send" class="w-10 h-10 text-white mb-4"></i>
-                        <h3 class="text-2xl font-display mb-3">Telegram | ПРЯМОЙ КОНТАКТ (I/O)</h3>
-                        <p class="text-text-faded mb-6">
-                            Для серьезных вопросов. Только по делу. Инициируй контакт и жди ответа.
-                        </p>
-                        <a href="https://t.me/sy1ku" target="_blank" class="text-white font-bold hover:text-accent-metal transition duration-300">НАПИСАТЬ @sy1ku</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <div class="section-separator"></div>
-
-        <section id="results" class="py-32 px-4 relative bg-bg-dark">
-            <div class="max-w-7xl mx-auto">
-                <h2 class="section-title text-4xl md:text-6xl font-black mb-16 text-center">
-                    ЛОГИ РЕЗУЛЬТАТОВ <span class="text-accent-metal">(ОТЧЕТЫ КЕЙСОВ)</span>
-                </h2>
-                
-                <div class="grid md:grid-cols-3 gap-8">
-                    <div class="testimonial-card p-6 ui-card rounded-xl transition-all duration-500 hover-lift">
-                        <div class="flex items-center gap-3 mb-4">
-                            <i data-lucide="user-check" class="w-5 h-5 text-accent-metal"></i>
-                            <h4 class="font-bold text-lg">@SYSTEM_UNIT_150K</h4>
-                        </div>
-                        <p class="text-text-faded italic mb-4">
-                            "Системный подход LUXEII позволил сгенерировать 150к прибыли за 60 дней. Это не теория, это рабочая конфигурация."
-                        </p>
-                        <div class="data-label text-sm font-mono mt-4">
-                            STATUS: PROFIT_GENERATED [+150,000 RUB]
-                        </div>
-                    </div>
-                    
-                    <div class="testimonial-card p-6 ui-card rounded-xl transition-all duration-500 hover-lift">
-                         <div class="flex items-center gap-3 mb-4">
-                            <i data-lucide="user-check" class="w-5 h-5 text-accent-metal"></i>
-                            <h4 class="font-bold text-lg">@INITIATOR_17</h4>
-                        </div>
-                        <p class="text-text-faded italic mb-4">
-                            "В 17 лет начал работать по алгоритму. Сразу понял, что это не очередной тренинг. Четкость и дисциплина — ключ."
-                        </p>
-                        <div class="data-label text-sm font-mono mt-4">
-                            AGE: 17, STATUS: EXECUTION_ACTIVE
-                        </div>
-                    </div>
-
-                    <div class="testimonial-card p-6 ui-card rounded-xl transition-all duration-500 hover-lift">
-                         <div class="flex items-center gap-3 mb-4">
-                            <i data-lucide="user-check" class="w-5 h-5 text-accent-metal"></i>
-                            <h4 class="font-bold text-lg">@PROJECT_ECHO_5</h4>
-                        </div>
-                        <p class="text-text-faded italic mb-4">
-                            "Дизайн, логика, подача — всё на уровне. Отличная платформа для тех, кто ищет серьёзные инструменты, а не развлечения."
-                        </p>
-                        <div class="data-label text-sm font-mono mt-4">
-                            RATING: 5/5_STARS, CODE_CLEAN
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="mt-20 p-8 ui-card border-l-4 border-accent-metal/50 bg-gray-soft/20">
-                    <h3 class="text-2xl font-display text-accent-metal mb-4">СИСТЕМНОЕ СООБЩЕНИЕ</h3>
-                    <p class="text-text-faded">
-                        Вся предоставленная информация проходит верификацию. Мы не работаем с неточными данными. Ваш успех — это наша эффективность. Вывод: **МАКСИМАЛЬНАЯ ВЫЧИСЛИТЕЛЬНАЯ МОЩНОСТЬ**.
-                    </p>
-                </div>
-            </div>
-        </section>
-
-        <section id="challenge" class="py-32 px-4 bg-gray-soft/80 relative overflow-hidden border-t border-border-heavy">
-            <div class="max-w-4xl mx-auto text-center">
-                <h2 class="text-4xl md:text-6xl font-black mb-6 text-white">
-                    ТЫ ГОТОВ ПРИНЯТЬ <span class="text-accent-metal">ВЫЗОВ</span>?
-                </h2>
-                <p class="text-xl text-text-faded mb-10">
-                    Твоя система ждёт обновления. Хватит смотреть. **EXECUTE NOW**.
-                </p>
-                
-                <form onsubmit="handleFinalForm(event)" class="max-w-xl mx-auto flex flex-col md:flex-row gap-4 ui-card p-6 rounded-2xl border-accent-metal/20 shadow-metal">
-                    <input type="email" placeholder="ТВОЙ EMAIL ИЛИ TELEGRAM НИК" required class="flex-grow bg-bg-dark/50 border border-white/10 rounded-lg p-4 text-white focus:border-accent-metal focus:outline-none transition-colors font-mono placeholder:text-text-faded">
-                    <button type="submit" class="metal-btn text-white font-bold py-4 px-8 rounded-lg uppercase tracking-widest text-lg hover-lift">
-                        ЗАПИСЬ В ЛИСТ ОЖИДАНИЯ
-                    </button>
-                </form>
-
-            </div>
-        </section>
+        <footer class="text-center text-subtle text-sm py-8 border-t border-white/5 animate-fade-in" style="animation-delay: 0.6s;">
+            <p>&copy; 2025 LUXEII. All Rights Reserved.</p>
+            <p class="mt-2 opacity-50">Designed & Coded by LUXEII</p>
+        </footer>
 
     </main>
 
-    <footer class="py-10 text-center border-t border-white/5 text-text-faded text-sm tracking-wider bg-bg-dark">
-        <div class="flex justify-center space-x-6 mb-4">
-            <a href="https://t.me/sy1ku" target="_blank" class="hover:text-accent-metal transition"><i data-lucide="send" class="w-6 h-6"></i></a>
-            <a href="https://youtube.com/@mellloos?si=nvD0MbXr4OfM1Iv" target="_blank" class="hover:text-accent-metal transition"><i data-lucide="youtube" class="w-6 h-6"></i></a>
-            <a href="https://t.me/cwexto" target="_blank" class="hover:text-accent-metal transition"><i data-lucide="code" class="w-6 h-6"></i></a>
-        </div>
-        <p>&copy; 2024 LUXEII DIGITAL EMPIRE. Все права зарезервированы. | ARCHITECTURE V3.0 | SYSTEM CODE: 78B4A5</p>
-        <div class="full-width-line mt-4 opacity-50"></div>
-    </footer>
-
     <script>
-        // Инициализация иконок
-        lucide.createIcons();
-        gsap.registerPlugin(ScrollTrigger);
+        // Небольшой скрипт для плавного появления элементов при скролле (если контента станет больше)
+        document.addEventListener('DOMContentLoaded', () => {
+            const observerOptions = {
+                threshold: 0.1
+            };
 
-        // Функция анимации для первого экрана
-        function animateHeroText() {
-            gsap.timeline()
-                .fromTo("#hero-title", 
-                    { opacity: 0, y: 50, scale: 0.8 }, 
-                    { opacity: 1, y: 0, scale: 1, duration: 1.2, ease: "power3.out" })
-                .fromTo("#hero-subtitle", 
-                    { opacity: 0, y: 30 }, 
-                    { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, "-=0.5")
-                .fromTo("#scroll-to-content", 
-                    { opacity: 0, scale: 0.5 }, 
-                    { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.7)" }, "-=0.4");
-        }
-
-        // 1. ГЛАВНАЯ ФУНКЦИЯ ЗАГРУЗКИ
-        window.addEventListener('load', () => {
-            
-            animateHeroText(); 
-            ScrollTrigger.refresh();
-            
-            // Parallax для фона Welcome Screen
-            gsap.to(".hero-grid-bg", {
-                scrollTrigger: {
-                    trigger: "#welcome-screen",
-                    start: "top top",
-                    end: "bottom top",
-                    scrub: true,
-                },
-                y: (i, target) => -target.offsetHeight * 0.3, 
-                ease: "none"
-            });
-        });
-
-        // 2. ОБРАБОТКА ФОРМЫ (ИМИТАЦИЯ)
-        function handleFinalForm(e) {
-            e.preventDefault();
-            const form = e.target;
-            const btn = form.querySelector('button');
-            
-            btn.innerText = "ПРОВЕРКА ВЫЗОВА...";
-            btn.disabled = true;
-            btn.style.boxShadow = 'none';
-
-            form.style.border = '2px dashed #00C4CC';
-            
-            setTimeout(() => {
-                btn.innerText = "ДОСТУП В КОНТАКТ-ЛИСТ";
-                btn.disabled = false;
-                btn.style.backgroundColor = 'white';
-                btn.style.color = '#0A0A0A';
-                form.style.border = '2px solid #00C4CC';
-                alert("Запись в лист ожидания LUXEII подтверждена. Проверь почту/Telegram.");
-            }, 2500);
-        }
-
-        // 3. ПЛАВНЫЙ СКРОЛЛ
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href');
-                document.querySelector(targetId).scrollIntoView({
-                    behavior: 'smooth'
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('opacity-100', 'translate-y-0');
+                        entry.target.classList.remove('opacity-0', 'translate-y-10');
+                    }
                 });
-            });
-        });
-        
-        // СКРОЛЛ ДЛЯ КНОПКИ ВСТУПИТЕЛЬНОГО ЭКРАНА
-        document.getElementById('scroll-to-content').addEventListener('click', function() {
-            // Скроллим к новой секции с дашбордом
-            document.querySelector('#dashboard').scrollIntoView({
-                behavior: 'smooth'
-            });
+            }, observerOptions);
+
+            // Можно добавить класс .reveal элементам в будущем
         });
     </script>
 </body>
