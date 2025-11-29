@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GENESIS | SYSTEM OVERRIDE</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;900&family=Syncopate:wght@400;700&display=swap');
+
+        :root {
+            --neon-green: #00FF94; /* Neo-Mint */
+            --deep-black: #050505;
+        }
+
+        body {
+            background-color: var(--deep-black);
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Типографика заголовков */
+        h1, h2, .brand-font {
+            font-family: 'Syncopate', sans-serif;
+            text-transform: uppercase;
+        }
+
+        /* Эффект шума (зернистость) для дороговизны */
+        .noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+            opacity: 0.05;
+            background: url('https://grainy-gradients.vercel.app/noise.svg');
+        }
+
+        /* Кастомный скроллбар */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #000;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--neon-green);
+        }
+
+        /* Свечение */
+        .glow-text {
+            text-shadow: 0 0 20px rgba(0, 255, 148, 0.5);
+        }
+        
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Анимация курсора (опционально) */
+        .cursor-dot {
+            width: 20px;
+            height: 20px;
+            background-color: var(--neon-green);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transition: transform 0.1s;
+        }
+    </style>
+</head>
+<body class="selection:bg-green-400 selection:text-black">
+
+    <div class="noise-overlay"></div>
+    <div class="fixed top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-white opacity-[0.03] blur-[150px] rounded-full pointer-events-none z-0"></div>
+
+    <nav class="fixed top-0 w-full z-40 px-6 py-6 flex justify-between items-center glass-panel border-b-0">
+        <div class="brand-font text-xl md:text-2xl font-bold tracking-widest flex items-center gap-2">
+            <span class="text-[#00FF94]">///</span> GENESIS
+        </div>
+        <button onclick="scrollToSection('#initiation')" class="hidden md:block px-6 py-2 border border-white/20 rounded-full hover:bg-white hover:text-black transition-all duration-300 text-sm tracking-widest">
+            ВХОД В СИСТЕМУ
+        </button>
+    </nav>
+
+    <section class="relative min-h-screen flex flex-col items-center justify-center pt-20 px-4">
+        
+        <div class="z-10 text-center relative">
+            <div class="hero-badge inline-block mb-6 px-4 py-1 border border-[#00FF94]/30 rounded-full bg-[#00FF94]/5 text-[#00FF94] text-xs md:text-sm tracking-[0.2em] uppercase opacity-0 translate-y-4">
+                System Override v.2.0
+            </div>
+            
+            <h1 class="hero-title text-4xl md:text-7xl lg:text-9xl font-bold leading-none mb-6 opacity-0 translate-y-10">
+                ВЫХОД ИЗ <br> 
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-400 to-gray-800">МАТРИЦЫ</span>
+            </h1>
+
+            <p class="hero-desc text-gray-400 text-sm md:text-lg max-w-2xl mx-auto mb-10 font-light leading-relaxed opacity-0 translate-y-10">
+                10.000.000 ₽ — это не удача. Это алгоритм. <br>
+                Перестань быть зрителем. Стань Архитектором своей реальности.
+            </p>
+
+            <button onclick="scrollToSection('#initiation')" class="hero-btn group relative px-10 py-5 bg-white text-black font-bold text-lg tracking-widest uppercase overflow-hidden opacity-0 translate-y-10">
+                <span class="relative z-10 group-hover:text-white transition-colors duration-300">Начать загрузку</span>
+                <div class="absolute inset-0 bg-[#00FF94] transform scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-300 ease-out"></div>
+            </button>
+        </div>
+
+        <div class="hero-image relative mt-16 md:mt-0 md:absolute md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 -z-10 opacity-0 scale-90">
+            <img src="https://images.unsplash.com/photo-1549576490-b0b4831ef60a?q=80&w=1000&auto=format&fit=crop" 
+                 alt="Genesis Mask" 
+                 class="w-[300px] h-[300px] md:w-[600px] md:h-[600px] object-cover rounded-full grayscale contrast-125 brightness-75 mask-image-gradient">
+            
+            <div class="floating-ui absolute top-20 -left-20 glass-panel p-4 rounded-lg hidden md:block">
+                <div class="flex items-center gap-3">
+                    <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                    <span class="text-xs font-mono text-green-400">NET_PROFIT: +420%</span>
+                </div>
+            </div>
+            
+            <div class="floating-ui-2 absolute bottom-20 -right-20 glass-panel p-4 rounded-lg hidden md:block">
+                <div class="text-xs font-mono text-gray-300">НОВЫЙ УЧАСТНИК:</div>
+                <div class="text-sm font-bold">ID_9921 ПРИНЯТ</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 border-y border-white/5 bg-black/50">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div class="stat-item">
+                <h3 class="text-3xl md:text-5xl font-bold font-mono text-white mb-2">4.5K</h3>
+                <p class="text-xs text-gray-500 uppercase tracking-widest">Адептов</p>
+            </div>
+            <div class="stat-item">
+                <h3 class="text-3xl md:text-5xl font-bold font-mono text-[#00FF94] mb-2">10M+</h3>
+                <p class="text-xs text-gray-500 uppercase tracking-widest">Оборот кейсов</p>
+            </div>
+            <div class="stat-item">
+                <h3 class="text-3xl md:text-5xl font-bold font-mono text-white mb-2">24/7</h3>
+                <p class="text-xs text-gray-500 uppercase tracking-widest">Поддержка</p>
+            </div>
+            <div class="stat-item">
+                <h3 class="text-3xl md:text-5xl font-bold font-mono text-white mb-2">∞</h3>
+                <p class="text-xs text-gray-500 uppercase tracking-widest">Возможности</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-32 px-6 relative">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="section-title text-2xl md:text-4xl font-bold mb-12 flex items-center gap-4">
+                <span class="w-12 h-[1px] bg-[#00FF94]"></span>
+                ОШИБКА СИСТЕМЫ
+            </h2>
+            
+            <div class="grid md:grid-cols-2 gap-12">
+                <div class="glass-panel p-8 rounded-2xl hover:border-[#00FF94]/50 transition-colors duration-500 feature-card">
+                    <i data-lucide="eye-off" class="text-[#00FF94] mb-6 w-8 h-8"></i>
+                    <h3 class="text-xl font-bold mb-4">ТЫ СПИШЬ</h3>
+                    <p class="text-gray-400 leading-relaxed">
+                        Ты смотришь ролики про успех, но ничего не меняешь. Твой дофамин тратится на чужие жизни. Мы отключим тебя от этой иглы.
+                    </p>
+                </div>
+
+                <div class="glass-panel p-8 rounded-2xl hover:border-[#00FF94]/50 transition-colors duration-500 feature-card">
+                    <i data-lucide="lock" class="text-[#00FF94] mb-6 w-8 h-8"></i>
+                    <h3 class="text-xl font-bold mb-4">КОД ЗАКРЫТ</h3>
+                    <p class="text-gray-400 leading-relaxed">
+                        Никто не расскажет тебе реальные схемы бесплатно. "Бесплатный сыр" — это контент для рабов алгоритмов.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="initiation" class="py-32 px-6 bg-gradient-to-b from-black to-[#0a0a0a] relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#00FF94] to-transparent opacity-50"></div>
+
+        <div class="max-w-xl mx-auto text-center relative z-10">
+            <h2 class="text-3xl md:text-5xl font-bold mb-6 font-mono uppercase">Инициация</h2>
+            <p class="text-gray-400 mb-10">
+                Доступ только для тех, кто готов действовать. Заполни форму, система проанализирует твой потенциал.
+            </p>
+
+            <form onsubmit="handleForm(event)" class="glass-panel p-8 rounded-3xl border border-white/10 shadow-2xl text-left space-y-6">
+                
+                <div>
+                    <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Твой никнейм</label>
+                    <input type="text" placeholder="@username" class="w-full bg-black/50 border border-white/10 rounded-lg p-4 text-white focus:border-[#00FF94] focus:outline-none transition-colors font-mono">
+                </div>
+
+                <div>
+                    <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Текущий доход</label>
+                    <select class="w-full bg-black/50 border border-white/10 rounded-lg p-4 text-white focus:border-[#00FF94] focus:outline-none transition-colors font-mono">
+                        <option>0 - 50.000 ₽</option>
+                        <option>50.000 - 150.000 ₽</option>
+                        <option>150.000 ₽ +</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Готовность к риску (1-10)</label>
+                    <input type="range" min="1" max="10" value="5" class="w-full accent-[#00FF94] h-1 bg-gray-800 rounded-lg appearance-none cursor-pointer">
+                </div>
+
+                <button type="submit" class="w-full py-5 bg-[#00FF94] text-black font-bold uppercase tracking-widest hover:bg-white transition-colors duration-300 rounded-lg mt-4">
+                    ЗАПРОСИТЬ ДОСТУП
+                </button>
+                
+                <p class="text-[10px] text-center text-gray-600 mt-4">
+                    Нажимая кнопку, вы принимаете условия протокола Genesis.
+                </p>
+            </form>
+        </div>
+    </section>
+
+    <footer class="py-10 text-center border-t border-white/5 text-gray-600 text-xs tracking-widest uppercase">
+        <p>&copy; 2024 GENESIS SYSTEM. ALL RIGHTS RESERVED.</p>
+        <div class="mt-4 flex justify-center gap-4">
+            <a href="#" class="hover:text-[#00FF94]">Telegram</a>
+            <a href="#" class="hover:text-[#00FF94]">TikTok</a>
+            <a href="#" class="hover:text-[#00FF94]">Agreement</a>
+        </div>
+    </footer>
+
+    <script>
+        // Инициализация иконок
+        lucide.createIcons();
+
+        // РЕГИСТРАЦИЯ PLUGINS GSAP
+        gsap.registerPlugin(ScrollTrigger);
+
+        // 1. АНИМАЦИЯ ПРИ ЗАГРУЗКЕ (HERO)
+        const tl = gsap.timeline();
+
+        tl.to(".hero-badge", { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" })
+          .to(".hero-title", { opacity: 1, y: 0, duration: 1, ease: "power3.out" }, "-=0.6")
+          .to(".hero-desc", { opacity: 1, y: 0, duration: 1, ease: "power3.out" }, "-=0.8")
+          .to(".hero-btn", { opacity: 1, y: 0, duration: 0.8, ease: "back.out(1.7)" }, "-=0.6")
+          .to(".hero-image", { opacity: 0.8, scale: 1, duration: 1.5, ease: "power2.out" }, "-=1");
+
+        // Анимация плавающих элементов
+        gsap.to(".floating-ui", {
+            y: -20,
+            duration: 2,
+            repeat: -1,
+            yoyo: true,
+            ease: "sine.inOut"
+        });
+        
+        gsap.to(".floating-ui-2", {
+            y: 20,
+            duration: 2.5,
+            repeat: -1,
+            yoyo: true,
+            ease: "sine.inOut",
+            delay: 0.5
+        });
+
+        // 2. АНИМАЦИЯ СКРОЛЛА
+        gsap.utils.toArray('.feature-card').forEach((card, i) => {
+            gsap.from(card, {
+                scrollTrigger: {
+                    trigger: card,
+                    start: "top 85%",
+                },
+                y: 50,
+                opacity: 0,
+                duration: 0.8,
+                delay: i * 0.2
+            });
+        });
+
+        gsap.from(".stat-item", {
+            scrollTrigger: {
+                trigger: ".stat-item",
+                start: "top 90%",
+            },
+            y: 30,
+            opacity: 0,
+            stagger: 0.2,
+            duration: 1
+        });
+
+        // 3. ОБРАБОТКА ФОРМЫ (ИМИТАЦИЯ)
+        function handleForm(e) {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            const originalText = btn.innerText;
+            
+            btn.innerText = "АНАЛИЗ ДАННЫХ...";
+            btn.style.backgroundColor = "white";
+            
+            setTimeout(() => {
+                btn.innerText = "ДОСТУП РАЗРЕШЕН";
+                btn.style.backgroundColor = "#00FF94";
+                alert("Добро пожаловать в GENESIS. Менеджер свяжется с вами.");
+            }, 2000);
+        }
+
+        // 4. ПЛАВНЫЙ СКРОЛЛ
+        function scrollToSection(id) {
+            document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
