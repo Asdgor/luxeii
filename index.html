@@ -1,281 +1,390 @@
 <!DOCTYPE html>
-<html lang="ru" class="scroll-smooth">
+<html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LUXEII | Motivation & Design</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Manrope:wght@400;700;800&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LUXEII — Visual & Video Production</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #030303;
+      --card-bg: rgba(18, 18, 22, 0.6);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-border-hover: rgba(255, 255, 255, 0.25);
+      --text: #f3f3f3;
+      --text-dim: #8a8a93;
+      --accent-glow: rgba(255, 255, 255, 0.07);
+    }
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        display: ['Manrope', 'sans-serif'],
-                    },
-                    colors: {
-                        dark: '#050505',
-                        card: '#0A0A0A', 
-                        subtle: '#9ca3af'
-                    },
-                    animation: {
-                        'fade-in-up': 'fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-                        'shimmer': 'shimmer 5s linear infinite',
-                    },
-                    keyframes: {
-                        fadeInUp: {
-                            '0%': { opacity: '0', transform: 'translateY(20px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' },
-                        },
-                        shimmer: {
-                            '0%': { backgroundPosition: '200% 0' },
-                            '100%': { backgroundPosition: '-200% 0' }
-                        },
-                    }
-                }
-            }
-        }
-    </script>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      cursor: none; /* Кастомный курсор */
+    }
 
-    <style>
-        body {
-            background-color: #050505;
-            color: #ffffff;
-            overflow-x: hidden;
-        }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 3rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      overflow-x: hidden;
+      position: relative;
+    }
 
-        /* Noise Texture - оставляем, чтобы фон не был мертвым */
-        .noise-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 40;
-            opacity: 0.04;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-        }
+    /* Фоновый градиентный свет */
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+      background-size: 32px 32px;
+      z-index: -2;
+      opacity: 0.4;
+    }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #050505; }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #555; }
+    /* Интерактивный свет за курсором */
+    #cursor-light {
+      position: fixed;
+      width: 450px;
+      height: 450px;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, rgba(0,0,0,0) 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: -1;
+      transition: width 0.3s, height 0.3s;
+    }
 
-        /* Text Shimmer Effect */
-        .animate-text-shimmer {
-            background: linear-gradient(
-                to right,
-                #6b7280 20%,
-                #ffffff 40%,
-                #ffffff 60%,
-                #6b7280 80%
-            );
-            background-size: 200% auto;
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: shimmer 5s linear infinite;
-        }
+    /* Кастомный курсор */
+    #cursor-dot {
+      position: fixed;
+      width: 8px;
+      height: 8px;
+      background: #fff;
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: 999;
+      transition: transform 0.1s ease;
+      box-shadow: 0 0 10px rgba(255,255,255,0.8);
+    }
 
-        /* Spotlight Glow Logic */
-        .spotlight-card:hover::before {
-            opacity: 1;
-        }
-        .spotlight-card::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            border-radius: 1.5rem;
-            padding: 1px; /* border width */
-            background: radial-gradient(
-                800px circle at var(--mouse-x) var(--mouse-y),
-                rgba(255, 255, 255, 0.4),
-                transparent 40%
-            );
-            -webkit-mask: 
-                linear-gradient(#fff 0 0) content-box, 
-                linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            opacity: 0;
-            transition: opacity 0.5s ease;
-            pointer-events: none;
-            z-index: 20;
-        }
-        
-        /* Inner subtle glow following mouse */
-        .spotlight-bg {
-            background: radial-gradient(
-                600px circle at var(--mouse-x) var(--mouse-y),
-                rgba(255, 255, 255, 0.06),
-                transparent 40%
-            );
-            opacity: 0;
-            transition: opacity 0.5s;
-        }
-        .spotlight-card:hover .spotlight-bg {
-            opacity: 1;
-        }
-    </style>
+    /* Шапка */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 2rem;
+    }
+
+    .brand {
+      font-weight: 800;
+      font-size: 1.6rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      background: linear-gradient(180deg, #fff 0%, #777 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .status {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 0.5rem 1rem;
+      border-radius: 100px;
+      border: 1px solid var(--card-border);
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      background-color: #00ff66;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #00ff66;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.3; }
+      100% { opacity: 1; }
+    }
+
+    /* Hero секция */
+    .hero {
+      margin: 5rem 0 4rem 0;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(180deg, #FFFFFF 30%, rgba(255,255,255,0.3) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      color: var(--text-dim);
+      font-size: 1.15rem;
+      max-width: 550px;
+      font-weight: 300;
+      line-height: 1.7;
+    }
+
+    /* Bento Grid */
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      margin-bottom: 4rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      padding: 2.5rem 2rem;
+      border-radius: 20px;
+      backdrop-filter: blur(20px);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(800px circle at var(--mouse-x, 0) var(--mouse-y, 0), rgba(255,255,255,0.06), transparent 40%);
+      opacity: 0;
+      transition: opacity 0.5s;
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card:hover {
+      border-color: var(--card-border-hover);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+    }
+
+    .card-num {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-dim);
+      letter-spacing: 0.15em;
+      margin-bottom: 2rem;
+    }
+
+    .card h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 0.8rem;
+      letter-spacing: -0.02em;
+    }
+
+    .card p {
+      font-size: 0.95rem;
+      color: var(--text-dim);
+      line-height: 1.6;
+      font-weight: 300;
+    }
+
+    /* Ссылки (Кнопки) */
+    .links-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem;
+      margin-bottom: 5rem;
+    }
+
+    .link-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.8rem 2.2rem;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      color: var(--text);
+      text-decoration: none;
+      backdrop-filter: blur(20px);
+      transition: all 0.3s ease;
+    }
+
+    .link-card.primary {
+      background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.02) 100%);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .link-card:hover {
+      border-color: #fff;
+      transform: scale(1.01);
+      box-shadow: 0 10px 30px rgba(255,255,255,0.05);
+    }
+
+    .link-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .link-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+
+    .link-sub {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+    }
+
+    .arrow-icon {
+      font-size: 1.4rem;
+      transition: transform 0.3s ease;
+    }
+
+    .link-card:hover .arrow-icon {
+      transform: translate(4px, -4px);
+    }
+
+    /* Подвал */
+    footer {
+      border-top: 1px solid var(--card-border);
+      padding-top: 2rem;
+      display: flex;
+      justify-content: space-between;
+      color: var(--text-dim);
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+    }
+
+    /* Адаптив */
+    @media (max-width: 900px) {
+      .bento-grid { grid-template-columns: 1fr; }
+      .links-grid { grid-template-columns: 1fr; }
+      body { cursor: default; }
+      * { cursor: default !important; }
+      #cursor-light, #cursor-dot { display: none; }
+    }
+  </style>
 </head>
-<body class="antialiased relative selection:bg-white selection:text-black">
+<body>
 
-    <div class="noise-overlay"></div>
+  <div class="bg-grid"></div>
+  <div id="cursor-light"></div>
+  <div id="cursor-dot"></div>
 
-    <div class="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+  <header>
+    <div class="brand">LUXEII</div>
+    <div class="status">
+      <div class="status-dot"></div>
+      <span>Available for projects</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <span class="hero-tag">// DIGITAL PRODUCTION & CREATIVE DIRECTION</span>
+      <h1>VISUAL CONTENT.<br>HIGH IMPACT.</h1>
+      <p>Создание динамичного видеоконтента, авторский монтаж и эстетичная упаковка медиа-ресурсов.</p>
+    </section>
+
+    <!-- Сетка Bento -->
+    <div class="bento-grid">
+      <div class="card">
+        <div class="card-num">01</div>
+        <h3>Short-Form Video</h3>
+        <p>Создание и монтаж коротких ролика под алгоритмы TikTok, Reels и Shorts. Динамика, удерживающая внимание.</p>
+      </div>
+      <div class="card">
+        <h3>Visual Identity</h3>
+        <div class="card-num" style="margin-top:-1rem; margin-bottom:1.5rem;">02</div>
+        <p>Проработка единого визуального стиля, эстетичная подача и оформление платформ под задачи бренда.</p>
+      </div>
+      <div class="card">
+        <div class="card-num">03</div>
+        <h3>Media Strategy</h3>
+        <p>Концептуальное сопровождение каналов, упаковка контента и построение узнаваемого образа.</p>
+      </div>
+    </div>
+
+    <!-- Кнопки-ссылки -->
+    <div class="links-grid">
+      <a href="https://t.me/luxeiip" class="link-card primary" target="_blank">
+        <div class="link-info">
+          <span class="link-title">PORTFOLIO</span>
+          <span class="link-sub">Смотреть работы в Telegram</span>
         </div>
+        <span class="arrow-icon">↗</span>
+      </a>
 
-    <main class="relative z-10 max-w-5xl mx-auto px-6 py-12 md:py-24 flex flex-col min-h-screen justify-between" id="cards-container">
-        
-        <header class="flex justify-between items-center mb-20 animate-fade-in-up" style="animation-delay: 0.1s;">
-            <div class="text-2xl font-display font-bold tracking-tighter flex items-center gap-2">
-                <div class="w-2 h-2 bg-white rounded-full animate-pulse shadow-[0_0_10px_rgba(255,255,255,0.8)]"></div>
-                LUXEII
-            </div>
-            <a href="https://t.me/sy1ka" class="group flex items-center gap-2 text-sm text-subtle hover:text-white transition-colors border border-white/10 px-4 py-2 rounded-full hover:bg-white/5">
-                <span>Contact Me</span>
-                <i class="fa-solid fa-arrow-right -rotate-45 group-hover:rotate-0 transition-transform duration-300"></i>
-            </a>
-        </header>
+      <a href="https://t.me/sy1ku" class="link-card" target="_blank">
+        <div class="link-info">
+          <span class="link-title">MAIN CHANNEL</span>
+          <span class="link-sub">Мысли, процессы и лайв</span>
+        </div>
+        <span class="arrow-icon">↗</span>
+      </a>
+    </div>
+  </main>
 
-        <section class="mb-24">
-            <h1 class="text-6xl md:text-8xl font-display font-bold leading-[0.9] mb-8 tracking-tight animate-fade-in-up" style="animation-delay: 0.2s;">
-                CREATE.<br>
-                INSPIRE.<br>
-                <span class="animate-text-shimmer">ELEVATE.</span>
-            </h1>
-            <div class="flex flex-col md:flex-row gap-6 items-start animate-fade-in-up" style="animation-delay: 0.3s;">
-                <p class="text-lg text-subtle max-w-lg leading-relaxed">
-                    Дизайн, который цепляет. Код, который работает. Мысли, которые меняют.
-                    <span class="text-white font-medium">LUXEII</span> — это про качество и глубину.
-                </p>
-                <div class="flex gap-3">
-                    <a href="#portfolio" class="px-6 py-3 bg-white text-black font-bold rounded-full hover:scale-105 transition-transform duration-300 shadow-[0_0_20px_rgba(255,255,255,0.2)]">Портфолио</a>
-                </div>
-            </div>
-        </section>
+  <footer>
+    <div>&copy; 2026 LUXEII. All rights reserved.</div>
+    <div>DESIGNED FOR HIGH IMPACT</div>
+  </footer>
 
-        <section id="portfolio" class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-24 animate-fade-in-up" style="animation-delay: 0.4s;">
-            
-            <a href="https://t.me/cwexto" target="_blank" class="spotlight-card group relative col-span-1 md:col-span-2 bg-card rounded-3xl p-1 overflow-hidden transition-all hover:scale-[1.01]">
-                <div class="spotlight-bg absolute inset-0 rounded-3xl pointer-events-none"></div>
-                
-                <div class="relative h-full bg-[#0d0d0d] rounded-[22px] p-8 flex flex-col justify-between z-10 border border-white/5">
-                    <div class="absolute top-0 right-0 p-8 opacity-20 group-hover:opacity-40 transition-opacity duration-500 transform group-hover:rotate-12">
-                        <i class="fa-solid fa-layer-group text-8xl text-white"></i>
-                    </div>
-                    
-                    <div>
-                        <div class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-6 text-xl text-white shadow-[0_0_15px_rgba(255,255,255,0.05)] group-hover:shadow-[0_0_20px_rgba(255,255,255,0.1)] transition-all">
-                            <i class="fa-solid fa-code"></i>
-                        </div>
-                        <h3 class="text-3xl font-bold mb-2 text-white">Портфолио</h3>
-                        <p class="text-subtle group-hover:text-gray-300 transition-colors">Веб-дизайн и разработка. Мои лучшие кейсы.</p>
-                    </div>
-                    
-                    <div class="mt-8 flex items-center gap-3 text-sm font-semibold text-white">
-                        <span class="border-b border-transparent group-hover:border-white transition-all">Смотреть работы</span>
-                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
-                    </div>
-                </div>
-            </a>
+  <script>
+    // Интерактив курсора и света
+    const light = document.getElementById('cursor-light');
+    const dot = document.getElementById('cursor-dot');
+    const cards = document.querySelectorAll('.card');
 
-            <a href="https://t.me/sy1ku" target="_blank" class="spotlight-card group relative col-span-1 bg-card rounded-3xl p-1 overflow-hidden transition-all hover:scale-[1.01]">
-                <div class="spotlight-bg absolute inset-0 rounded-3xl pointer-events-none"></div>
-                
-                <div class="relative h-full bg-[#0d0d0d] rounded-[22px] p-8 flex flex-col justify-between z-10 border border-white/5">
-                    <div class="absolute inset-0 bg-gradient-to-t from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    
-                    <div>
-                        <div class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-6 text-xl shadow-[0_0_15px_rgba(59,130,246,0.1)]">
-                            <i class="fa-brands fa-telegram"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold mb-2">Мой Блог</h3>
-                        <p class="text-subtle text-sm">Лайфстайл, мысли, бекстейдж.</p>
-                    </div>
+    document.addEventListener('mousemove', (e) => {
+      // Движение фона и точки
+      light.style.left = e.clientX + 'px';
+      light.style.top = e.clientY + 'px';
+      
+      dot.style.left = e.clientX + 'px';
+      dot.style.top = e.clientY + 'px';
 
-                    <div class="mt-auto pt-8">
-                        <div class="flex items-end gap-2 mb-2">
-                            <span class="text-4xl font-display font-bold text-white">446</span>
-                            <span class="text-sm text-subtle mb-1.5">подписчиков</span>
-                        </div>
-                        <div class="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
-                            <div class="h-full bg-white w-[40%] shadow-[0_0_10px_rgba(255,255,255,0.5)]"></div>
-                        </div>
-                    </div>
-                </div>
-            </a>
-
-            <a href="#" class="spotlight-card group relative col-span-1 bg-card rounded-3xl p-1 overflow-hidden transition-all hover:scale-[1.01]">
-                <div class="spotlight-bg absolute inset-0 rounded-3xl pointer-events-none"></div>
-                
-                <div class="relative h-full bg-white text-black rounded-[22px] p-8 flex flex-col justify-between z-10 overflow-hidden">
-                    <div class="absolute -right-4 -bottom-4 w-32 h-32 bg-red-500 rounded-full blur-[60px] opacity-20 group-hover:opacity-40 transition-all duration-500"></div>
-                    
-                    <div class="relative z-10">
-                        <div class="w-12 h-12 rounded-2xl bg-black/5 flex items-center justify-center mb-6 text-xl">
-                            <i class="fa-brands fa-youtube"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold">YouTube</h3>
-                        <p class="font-medium mt-1 opacity-70">Мотивация</p>
-                    </div>
-                    
-                    <div class="relative z-10 self-end transform group-hover:scale-110 transition-transform duration-300">
-                        <i class="fa-solid fa-circle-play text-5xl shadow-xl rounded-full"></i>
-                    </div>
-                </div>
-            </a>
-
-            <a href="https://t.me/sy1ka" target="_blank" class="spotlight-card group relative col-span-1 md:col-span-2 bg-card rounded-3xl p-1 overflow-hidden transition-all hover:scale-[1.01]">
-                <div class="spotlight-bg absolute inset-0 rounded-3xl pointer-events-none"></div>
-                
-                <div class="relative h-full bg-[#0d0d0d] rounded-[22px] p-8 flex items-center justify-between z-10 border border-white/5">
-                    <div class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
-                    
-                    <div class="relative z-10">
-                        <h3 class="text-2xl font-bold mb-2 text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-gray-400 transition-all">
-                            Написать мне
-                        </h3>
-                        <p class="text-subtle">Обсудить проект или идею</p>
-                    </div>
-                    
-                    <div class="relative z-10 w-14 h-14 rounded-full border border-white/20 flex items-center justify-center text-xl group-hover:bg-white group-hover:text-black group-hover:border-transparent transition-all duration-300 shadow-[0_0_15px_rgba(255,255,255,0.05)]">
-                        <i class="fa-regular fa-paper-plane"></i>
-                    </div>
-                </div>
-            </a>
-
-        </section>
-
-        <footer class="text-center text-subtle text-xs py-8 animate-fade-in-up opacity-50" style="animation-delay: 0.6s;">
-            <p>2025 © LUXEII. Crafted with passion.</p>
-        </footer>
-
-    </main>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const cards = document.querySelectorAll('.spotlight-card');
-            const container = document.getElementById('cards-container');
-
-            container.onmousemove = e => {
-                for(const card of cards) {
-                    const rect = card.getBoundingClientRect(),
-                          x = e.clientX - rect.left,
-                          y = e.clientY - rect.top;
-
-                    card.style.setProperty("--mouse-x", `${x}px`);
-                    card.style.setProperty("--mouse-y", `${y}px`);
-                };
-            }
-        });
-    </script>
+      // Подсветка карточек относительно мыши
+      cards.forEach(card => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        card.style.setProperty('--mouse-x', `${x}px`);
+        card.style.setProperty('--mouse-y', `${y}px`);
+      });
+    });
+  </script>
 </body>
 </html>
